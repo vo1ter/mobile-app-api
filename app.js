@@ -3,6 +3,7 @@ const express = require('express')
 const multer = require('multer')
 const { processAudio } = require('./audioProcessing');
 const app = express()
+const fs = require('fs');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
