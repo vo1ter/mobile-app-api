@@ -4,7 +4,6 @@ const { spawn } = require('child_process');
 
 const processAudio = async (filePath) => {
     let noisePeaks = [];
-    const loudThreshold = -15;
     let success = false;
 
     const processPromise = new Promise((resolve, reject) => {
@@ -19,9 +18,7 @@ const processAudio = async (filePath) => {
                     const timestamp = timeMatch[1];
                     const peakValue = parseFloat(peakMatch[1]);
 
-                    if (peakMatch[1] > loudThreshold) {
-                        noisePeaks.push({ timestamp, peakValue });
-                    }
+                    noisePeaks.push({ timestamp, peakValue });
                 }
             })
             .on('error', (err) => {

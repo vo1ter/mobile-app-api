@@ -16,16 +16,29 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`);
+    next();
+})
+
 app.post('/uploadShotTimerAudio', upload.single('audio'), async (req, res) => {
-    const filePath = req.file.path;
+    try {
+        const filePath = req.file.path;
 
-    const result = await processAudio(filePath)
+        const result = await processAudio(filePath)
 
-    await fs.unlinkSync(filePath);;
+        await fs.unlinkSync(filePath);
 
-    if(!result.success) return res.status(500).send('Error processing audio file');
+        if(!result.success) return res.status(500).send('Error processing audio file');
 
-    res.status(200).send(JSON.stringify(result));
+        console.log(result)
+
+        res.status(200).send(JSON.stringify(result));
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('Error processing audio file');
+    }
 });
 
 app.listen(57300);
